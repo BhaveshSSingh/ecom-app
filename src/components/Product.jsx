@@ -12,18 +12,20 @@ export default function Product({
   const StarRating = ({ rating }) =>
     Array(Math.round(rating))
       .fill(0)
-      .map((rating) => <span>⭐️</span>);
+      .map((rating) => <span>⭐</span>);
 
   return (
     <div className="product" key={id}>
       <img src={image} alt="" loading="lazy" />
-      <h3>{title}</h3>
-      <h5>{description}</h5>
-      <h6>
-        <StarRating rating={rating.rate} />
-        out of {rating.count}
-      </h6>
-      <strong>${price}</strong>
+      <div className="product__info">
+        <h3 className="product__title line__clamp__title">{title}</h3>
+        <h5 className="line__clamp">{description}</h5>
+        <h6>
+          <StarRating rating={rating.rate} />
+          out of {rating.count}
+        </h6>
+        <strong>${price}</strong>
+      </div>
     </div>
   );
 }
