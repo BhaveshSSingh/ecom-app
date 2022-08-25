@@ -1,0 +1,5 @@
+.products__rows {
+  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+}

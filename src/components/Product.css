@@ -1,0 +1,8 @@
+.product {
+  width: 300px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.product img {
+  max-width: 300px;
+}
