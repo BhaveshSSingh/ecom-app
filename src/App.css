@@ -1,10 +1,30 @@
+.layout__content {
+  padding: 16px;
+}
+/* header */
 .header {
   z-index: 1;
   padding: 16px;
+  gap: 16px;
   position: sticky;
   top: 0;
   background-color: var(--main-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.layout__content {
-  padding: 16px;
+
+.header__title {
+  flex: 10%;
+}
+.header__searchbar {
+  flex: 60%;
+  background-color: white;
+  border-radius: 5px;
+  height: 30px;
+  justify-content: center;
+  padding: 3px;
+}
+.logo {
+  width: 40px;
 }
