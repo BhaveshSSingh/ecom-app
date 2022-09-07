@@ -6,8 +6,8 @@
   margin: 0%;
   border: 0%;
   font-family: "Poppins", monospace;
-  --purple: #9018ff;
-  --dark-blue: #7167ff;
+  --main-blue: rgb(37 99 235);
+  --dark-blue: rgb(0, 81, 255);
   --light-blue: #4ebeff;
 }
 /* Styling the scroll bar */
@@ -16,5 +16,5 @@ body::-webkit-scrollbar {
 }
 body::-webkit-scrollbar-thumb {
   /* border-radius: 1rem; */
-  background-color: var(--purple);
+  background-color: var(--dark-blue);
 }

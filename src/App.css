@@ -3,7 +3,7 @@
   padding: 16px;
   position: sticky;
   top: 0;
-  background-color: var(--purple);
+  background-color: var(--main-blue);
 }
 .layout__content {
   padding: 16px;
