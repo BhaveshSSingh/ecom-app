@@ -6,6 +6,7 @@ import { Routes, Route, Outlet, Link } from "react-router-dom";
 import logo from "../src/assets/logo.png";
 import { useEffect } from "react";
 import { useState } from "react";
+import { ACTION, useDispatch, useSelector } from "./store";
 
 function App() {
   return (
@@ -23,6 +24,13 @@ function App() {
 }
 
 function SearchBar() {
+  // consuming custom hooks from store
+  const selectedCategory = useSelector((state) => state.selectedCategory);
+
+  const dispatch = useDispatch();
+  // console.log(selectedCategory);
+  console.log({ selectedCategory });
+
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     fetchAllCategories();
@@ -32,11 +40,24 @@ function SearchBar() {
     const result = await fetch("https://fakestoreapi.com/products/categories");
     setCategories(await result.json());
   }
+
+  const handleCategoryChange = (e) =>
+    dispatch({
+      type: ACTION.UPDATE_SELECTED_CATEGORY,
+      payload: e.target.value,
+    });
+
   return (
     <>
       <div className="filter">
         <section className="filter__category">
-          <select name="category-filter" id="category-filter">
+          <select
+            name="category-filter"
+            id="category-filter"
+            onChange={handleCategoryChange}
+            value={selectedCategory}
+          >
+            <option value="all">all</option>
             {categories?.map((category) => (
               <option key={category} value={category}>
                 {category}

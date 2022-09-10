@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
+import { useSelector } from "../store";
 
 function Home() {
+  const selectedCategory = useSelector((state) => state.selectedCategory);
   let [products, setProducts] = useState([]);
 
   const filteredCategories = Array.from(
@@ -9,15 +11,23 @@ function Home() {
   );
   console.log(filteredCategories);
 
-  async function fetchProducts() {
+  async function fetchAllProducts() {
     const result = await fetch("https://fakestoreapi.com/products");
     setProducts(await result.json());
     console.log("re-render triggered", products);
   }
-  useEffect(() => {
-    fetchProducts();
-  }, []);
 
+  async function fetchProductsByCategories(category) {
+    const result = await fetch(
+      `https://fakestoreapi.com/products/category/${category}`
+    );
+    setProducts(await result.json());
+  }
+  useEffect(() => {
+    selectedCategory === "all"
+      ? fetchAllProducts()
+      : fetchProductsByCategories(selectedCategory);
+  }, [selectedCategory]);
   useEffect(() => {
     console.log("products updated", products);
   }, [products]);
