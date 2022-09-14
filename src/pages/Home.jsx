@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from "react";
 import "./Home.css";
-import { useSelector } from "../store";
+import { ACTION, useDispatch, useSelector } from "../store";
+import { useSearchParams } from "react-router-dom";
 
 function Home() {
-  const selectedCategory = useSelector((state) => state.selectedCategory);
-  let [products, setProducts] = useState([]);
+  const [searchParams] = useSearchParams();
+  const selectedCategory = searchParams.get("category");
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
 
+  const filteredProducts = selectedCategory
+    ? products.filter((prod) => prod.category === selectedCategory)
+    : products;
   const filteredCategories = Array.from(
-    new Set(products?.map((prod) => prod.category))
+    new Set(filteredProducts?.map((prod) => prod.category))
   );
   console.log(filteredCategories);
 
   async function fetchAllProducts() {
     const result = await fetch("https://fakestoreapi.com/products");
-    setProducts(await result.json());
+    dispatch({ type: ACTION.ADD_PRODUCTS, payload: await result.json() });
     console.log("re-render triggered", products);
   }
 
-  async function fetchProductsByCategories(category) {
-    const result = await fetch(
-      `https://fakestoreapi.com/products/category/${category}`
-    );
-    setProducts(await result.json());
+  if (!products?.length) {
+    fetchAllProducts();
   }
-  useEffect(() => {
-    selectedCategory === "all"
-      ? fetchAllProducts()
-      : fetchProductsByCategories(selectedCategory);
-  }, [selectedCategory]);
+  // async function fetchProductsByCategories(category) {
+  //   const result = await fetch(
+  //     `https://fakestoreapi.com/products/category/${category}`
+  //   );
+  //   setProducts(await result.json());
+  // }
+
+  // useEffect(() => {
+  //   selectedCategory === "all"
+  //     ? fetchAllProducts()
+  //     : fetchProductsByCategories(selectedCategory);
+  // }, [selectedCategory]);
   useEffect(() => {
     console.log("products updated", products);
   }, [products]);
@@ -37,7 +47,7 @@ function Home() {
       {filteredCategories?.length
         ? filteredCategories?.map((category) => (
             <Category key={category} title={category}>
-              {products
+              {filteredProducts
                 .filter((prod) => prod.category === category)
                 ?.map((prod) => (
                   <Product key={prod.id} product={prod} />
