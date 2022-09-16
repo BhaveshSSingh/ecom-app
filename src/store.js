@@ -17,7 +17,6 @@ const initalState = {
 };
 
 // When the action happens
-
 function reducer(state, action) {
   const { type, payload } = action;
   switch (type) {
@@ -33,6 +32,7 @@ function reducer(state, action) {
   }
   return state;
 }
+
 const StateContext = React.createContext();
 const StateProvider = ({ children }) => {
   const reducerContext = React.useReducer(reducer, initalState);

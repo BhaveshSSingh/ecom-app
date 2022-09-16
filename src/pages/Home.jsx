@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./Home.css";
 import { ACTION, useDispatch, useSelector } from "../store";
 import { useSearchParams } from "react-router-dom";
@@ -6,12 +6,19 @@ import { useSearchParams } from "react-router-dom";
 function Home() {
   const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
+  const searchTerm = searchParams.get("searchterm");
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
 
-  const filteredProducts = selectedCategory
+  let filteredProducts = selectedCategory
     ? products.filter((prod) => prod.category === selectedCategory)
     : products;
+  filteredProducts = searchTerm
+    ? filteredProducts.filter((prod) =>
+        prod.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : filteredProducts;
+
   const filteredCategories = Array.from(
     new Set(filteredProducts?.map((prod) => prod.category))
   );
@@ -38,9 +45,9 @@ function Home() {
   //     ? fetchAllProducts()
   //     : fetchProductsByCategories(selectedCategory);
   // }, [selectedCategory]);
-  useEffect(() => {
-    console.log("products updated", products);
-  }, [products]);
+  // useEffect(() => {
+  //   console.log("products updated", products);
+  // }, [products]);
 
   return (
     <div>
@@ -81,7 +88,7 @@ function Product({ product }) {
       <div className="product__info">
         <h3 className="product__title line__clamp__title">{title}</h3>
         <h5 className="line__clamp">{description}</h5>
-        <h5>
+        <h5 key={rating}>
           <StarRating rating={rating.rate} />
           out of {rating.count}
         </h5>

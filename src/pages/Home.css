@@ -43,6 +43,9 @@
 
 /* Category */
 .category__title {
+  padding: 16px 0;
+  font-weight: 600;
+  font-size: larger;
   text-transform: capitalize;
 }
 .category__row {

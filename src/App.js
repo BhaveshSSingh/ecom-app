@@ -11,10 +11,16 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import logo from "../src/assets/logo.png";
-import { useEffect } from "react";
 import { useState } from "react";
 import { ACTION, useDispatch, useSelector } from "./store";
-import { type } from "@testing-library/user-event/dist/type";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxPopover,
+  ComboboxList,
+  ComboboxOption,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
 
 function App() {
   return (
@@ -31,19 +37,80 @@ function App() {
   );
 }
 
+// For the drop down on Search
+function ComboBox({ items, onSelectionChange }) {
+  const [searchParams] = useSearchParams();
+
+  const [searchTerm, setSearchTerm] = useState(() =>
+    searchParams.get("searchterm")
+  );
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    if (!value && searchTerm !== value) {
+      // empyt value or the combobox is cleared
+      onSelectionChange(value);
+    }
+    setSearchTerm(e.target.value);
+  };
+
+  const handleProductSelection = (productTitle) => {
+    setSearchTerm(productTitle);
+    onSelectionChange(productTitle);
+  };
+
+  const handleSearch = () => {};
+
+  const results = searchTerm
+    ? items.filter((item) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : items;
+
+  return (
+    <>
+      <Combobox aria-label="products" onSelect={handleProductSelection}>
+        <ComboboxInput
+          className="city-search-input"
+          onChange={handleChange}
+          type="search"
+          value={searchTerm}
+        />
+        <button onClick={handleSearch}>🔎</button>
+        {results && (
+          <ComboboxPopover className="shadow-popup">
+            {results.length > 0 ? (
+              <ComboboxList>
+                {results.slice(0, 5).map((prod, index) => (
+                  <ComboboxOption key={prod.id} value={prod.title} />
+                ))}
+              </ComboboxList>
+            ) : (
+              <span style={{ display: "block", margin: 8 }}>
+                No results found
+              </span>
+            )}
+          </ComboboxPopover>
+        )}
+      </Combobox>
+    </>
+  );
+}
+
 function SearchBar() {
   // changing category
   const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("searchterm");
+
+  // Getting products for combobox
+  const products = useSelector((state) => state.products);
 
   const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get("category") ?? "all"
+    () => searchParams.get("category") ?? "all"
   );
   const categories = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    fetchAllCategories();
-  }, []);
 
   async function fetchAllCategories() {
     const result = await fetch("https://fakestoreapi.com/products/categories");
@@ -56,11 +123,27 @@ function SearchBar() {
 
   const handleCategoryChange = (e) => {
     const { value: category } = e.target;
-
-    setSelectedCategory(e.target.value);
-
-    navigate(category === "all" ? "/" : `/?category=${e.target.value}`);
+    setSelectedCategory(category);
+    navigate(
+      category === "all"
+        ? "/"
+        : `/?category=${category}${
+            searchTerm ? "&searchterm=" + searchTerm : ""
+          }`
+    );
   };
+
+  // const handleSearchTerm = () => {};
+  const handleSearchChange = (searchTerm) => {
+    if (searchTerm) {
+      navigate(`/?category=${selectedCategory}&searchterm=${searchTerm}`);
+    } else {
+      navigate(
+        selectedCategory === "all" ? "/" : `/?category=${selectedCategory}`
+      );
+    }
+  };
+
   return (
     <>
       <div className="filter">
@@ -79,7 +162,16 @@ function SearchBar() {
             ))}
           </select>
         </section>
-        <section className="filter__text"></section>
+        <section className="filter__text">
+          <ComboBox
+            onSelectionChange={handleSearchChange}
+            items={
+              selectedCategory === "all"
+                ? products
+                : products?.filter((prod) => prod.category === selectedCategory)
+            }
+          />
+        </section>
       </div>
     </>
   );
