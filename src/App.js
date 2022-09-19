@@ -38,11 +38,11 @@ function App() {
 }
 
 // For the drop down on Search
-function ComboBox({ items, onSelectionChange }) {
+function ComboBox({ items, onSelectionChange, onSearch }) {
   const [searchParams] = useSearchParams();
 
-  const [searchTerm, setSearchTerm] = useState(() =>
-    searchParams.get("searchterm")
+  const [searchTerm, setSearchTerm] = useState(
+    () => searchParams.get("searchterm") ?? ""
   );
 
   const handleChange = (e) => {
@@ -51,7 +51,7 @@ function ComboBox({ items, onSelectionChange }) {
       // empyt value or the combobox is cleared
       onSelectionChange(value);
     }
-    setSearchTerm(e.target.value);
+    setSearchTerm(value);
   };
 
   const handleProductSelection = (productTitle) => {
@@ -59,7 +59,9 @@ function ComboBox({ items, onSelectionChange }) {
     onSelectionChange(productTitle);
   };
 
-  const handleSearch = () => {};
+  const handleSearch = () => {
+    onSearch(searchTerm);
+  };
 
   const results = searchTerm
     ? items.filter((item) =>
@@ -133,10 +135,13 @@ function SearchBar() {
     );
   };
 
-  // const handleSearchTerm = () => {};
   const handleSearchChange = (searchTerm) => {
     if (searchTerm) {
-      navigate(`/?category=${selectedCategory}&searchterm=${searchTerm}`);
+      navigate(
+        selectedCategory === "all"
+          ? `/?searchterm=${searchTerm}`
+          : `/?category=${selectedCategory}&searchterm=${searchTerm}`
+      );
     } else {
       navigate(
         selectedCategory === "all" ? "/" : `/?category=${selectedCategory}`
@@ -145,37 +150,38 @@ function SearchBar() {
   };
 
   return (
-    <>
-      <div className="filter">
-        <section className="filter__category">
-          <select
-            name="category-filter"
-            id="category-filter"
-            onChange={handleCategoryChange}
-            value={selectedCategory}
-          >
-            <option value="all">all</option>
-            {categories?.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </section>
-        <section className="filter__text">
-          <ComboBox
-            onSelectionChange={handleSearchChange}
-            items={
-              selectedCategory === "all"
-                ? products
-                : products?.filter((prod) => prod.category === selectedCategory)
-            }
-          />
-        </section>
-      </div>
-    </>
+    <div className="filter">
+      <section className="filter__category">
+        <select
+          name="category-filter"
+          id="category-filter"
+          onChange={handleCategoryChange}
+          value={selectedCategory}
+        >
+          <option value="all">all</option>
+          {categories?.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </section>
+      <section className="filter__text">
+        <ComboBox
+          items={
+            selectedCategory === "all"
+              ? products
+              : products?.filter((prod) => prod.category === selectedCategory)
+          }
+          onSelectionChange={handleSearchChange}
+          onSearch={handleSearchChange}
+        />
+      </section>
+    </div>
   );
 }
+
+// Creating
 
 function Header() {
   return (

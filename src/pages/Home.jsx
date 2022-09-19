@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import "./Home.css";
 import { ACTION, useDispatch, useSelector } from "../store";
 import { useSearchParams } from "react-router-dom";
+import "./Home.css";
 
 function Home() {
   const [searchParams] = useSearchParams();
@@ -22,12 +21,12 @@ function Home() {
   const filteredCategories = Array.from(
     new Set(filteredProducts?.map((prod) => prod.category))
   );
-  console.log(filteredCategories);
+  // console.log(filteredCategories);
 
   async function fetchAllProducts() {
     const result = await fetch("https://fakestoreapi.com/products");
     dispatch({ type: ACTION.ADD_PRODUCTS, payload: await result.json() });
-    console.log("re-render triggered", products);
+    // console.log("re-render triggered", products);
   }
 
   if (!products?.length) {
@@ -81,14 +80,14 @@ function Category({ title, children }) {
 }
 
 function Product({ product }) {
-  const { id, image, title, rating, price, description } = product;
+  const { image, title, rating, price, description } = product;
   return (
-    <div className="product " key={id}>
+    <div className="product ">
       <img src={image} alt="" loading="lazy" />
       <div className="product__info">
         <h3 className="product__title line__clamp__title">{title}</h3>
         <h5 className="line__clamp">{description}</h5>
-        <h5 key={rating}>
+        <h5>
           <StarRating rating={rating.rate} />
           out of {rating.count}
         </h5>

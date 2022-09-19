@@ -28,3 +28,24 @@
 .logo {
   width: 40px;
 }
+
+/* styles for filter */
+
+.filter {
+  display: flex;
+  width: 100%;
+}
+
+.filter__category select {
+  text-transform: capitalize;
+}
+.filter text {
+  width: 100%;
+}
+
+.filter__text div[data-reach-combobox] {
+  display: flex;
+}
+.filter__text input {
+  width: 100%;
+}

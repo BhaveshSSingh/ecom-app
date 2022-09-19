@@ -18,3 +18,10 @@ body::-webkit-scrollbar-thumb {
   /* border-radius: 1rem; */
   background-color: var(--dark-blue);
 }
+
+input,
+select,
+button {
+  padding: 16px;
+  font-size: 1rem;
+}
