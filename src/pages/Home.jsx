@@ -1,6 +1,7 @@
 import { ACTION, useDispatch, useSelector } from "../store";
 import { useSearchParams } from "react-router-dom";
 import "./Home.css";
+import { StarRating } from "../components/StarRating";
 
 function Home() {
   const [searchParams] = useSearchParams();
@@ -32,21 +33,6 @@ function Home() {
   if (!products?.length) {
     fetchAllProducts();
   }
-  // async function fetchProductsByCategories(category) {
-  //   const result = await fetch(
-  //     `https://fakestoreapi.com/products/category/${category}`
-  //   );
-  //   setProducts(await result.json());
-  // }
-
-  // useEffect(() => {
-  //   selectedCategory === "all"
-  //     ? fetchAllProducts()
-  //     : fetchProductsByCategories(selectedCategory);
-  // }, [selectedCategory]);
-  // useEffect(() => {
-  //   console.log("products updated", products);
-  // }, [products]);
 
   return (
     <div>
@@ -65,11 +51,6 @@ function Home() {
   );
 }
 
-const StarRating = ({ rating }) =>
-  Array(Math.round(rating))
-    .fill(0)
-    .map((rating) => <span>⭐️</span>);
-
 function Category({ title, children }) {
   return (
     <>
@@ -81,6 +62,11 @@ function Category({ title, children }) {
 
 function Product({ product }) {
   const { image, title, rating, price, description } = product;
+  const dispatch = useDispatch();
+  const addProductToCart = () => {
+    dispatch({ type: ACTION.ADD_TO_CART, payload: { product } });
+  };
+
   return (
     <div className="product ">
       <img src={image} alt="" loading="lazy" />
@@ -88,10 +74,12 @@ function Product({ product }) {
         <h3 className="product__title line__clamp__title">{title}</h3>
         <h5 className="line__clamp">{description}</h5>
         <h5>
-          <StarRating rating={rating.rate} />
-          out of {rating.count}
+          <StarRating rating={rating} />
         </h5>
         <strong>${price}</strong>
+        <p className="product__add" onClick={addProductToCart}>
+          <button>Add to cart</button>
+        </p>
       </div>
     </div>
   );

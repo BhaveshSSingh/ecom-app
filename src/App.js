@@ -10,7 +10,6 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import logo from "../src/assets/logo.png";
 import { useState } from "react";
 import { ACTION, useDispatch, useSelector } from "./store";
 import {
@@ -21,6 +20,7 @@ import {
   ComboboxOption,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
+import { getItemCount } from "./utils";
 
 function App() {
   return (
@@ -182,20 +182,59 @@ function SearchBar() {
 }
 
 // Creating
+function CartInfo() {
+  const cartItems = useSelector((state) => state.cart);
+  const count = getItemCount(cartItems);
+  console.log(cartItems);
+  return (
+    <div className="cart__info">
+      <span className="count">{count}</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        className="container"
+        color="white"
+      >
+        <path d="M1 1.75A.75.75 0 011.75 1h1.628a1.75 1.75 0 011.734 1.51L5.18 3a65.25 65.25 0 0113.36 1.412.75.75 0 01.58.875 48.645 48.645 0 01-1.618 6.2.75.75 0 01-.712.513H6a2.503 2.503 0 00-2.292 1.5H17.25a.75.75 0 010 1.5H2.76a.75.75 0 01-.748-.807 4.002 4.002 0 012.716-3.486L3.626 2.716a.25.25 0 00-.248-.216H1.75A.75.75 0 011 1.75zM6 17.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15.5 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+      </svg>
+    </div>
+  );
+}
 
 function Header() {
   return (
     <nav className="header">
       <section className="header__title">
         <Link to="/">
-          <img className="logo" src={logo} alt="logo" />
+          <svg
+            className="icon"
+            alt="logo"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 004.25 22.5h15.5a1.875 1.875 0 001.865-2.071l-1.263-12a1.875 1.875 0 00-1.865-1.679H16.5V6a4.5 4.5 0 10-9 0zM12 3a3 3 0 00-3 3v.75h6V6a3 3 0 00-3-3zm-3 8.25a3 3 0 106 0v-.75a.75.75 0 011.5 0v.75a4.5 4.5 0 11-9 0v-.75a.75.75 0 011.5 0v.75z"
+              clip-rule="evenodd"
+            />
+          </svg>
         </Link>
       </section>
       <section className="header__searchbar">
         <SearchBar />
       </section>
-      <section className="header__navigation">Welcome User</section>
-      <Link to="/cart">Cart</Link>
+      <section className="header__navigation">
+        <ul className="header__navigation__links">
+          <li>Welcome User</li>
+          <li>
+            <Link to="/cart">
+              <CartInfo />
+            </Link>
+          </li>
+        </ul>
+      </section>
     </nav>
   );
 }
