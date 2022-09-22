@@ -51,6 +51,7 @@
   width: 100%;
 }
 .header__navigation__links {
+  color: white;
   display: flex;
   list-style: none;
   align-items: center;

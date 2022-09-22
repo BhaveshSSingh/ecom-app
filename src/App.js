@@ -9,6 +9,7 @@ import {
   Link,
   useNavigate,
   useSearchParams,
+  Navigate,
 } from "react-router-dom";
 import { useState } from "react";
 import { ACTION, useDispatch, useSelector } from "./store";
@@ -21,6 +22,9 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 import { getItemCount } from "./utils";
+import Checkout from "./pages/Checkout";
+import { useAuth } from "./firebase/auth";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
@@ -29,12 +33,29 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/Cart" element={<Cart />} />
+          <Route
+            path="/Checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
-        <Route path="/Login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </>
   );
+}
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  return children;
 }
 
 // For the drop down on Search
@@ -203,6 +224,12 @@ function CartInfo() {
 }
 
 function Header() {
+  const navigate = useNavigate();
+  const { signOut, user } = useAuth();
+  const signOutCurrentUser = async () => {
+    await signOut();
+    navigate("/login");
+  };
   return (
     <nav className="header">
       <section className="header__title">
@@ -227,7 +254,12 @@ function Header() {
       </section>
       <section className="header__navigation">
         <ul className="header__navigation__links">
-          <li>Welcome User</li>
+          <li>
+            {user ? `Hello ${user?.displayName ?? user.email}` : "Sign In"}
+          </li>
+          <li>
+            {user ? <button onClick={signOutCurrentUser}>Logout</button> : null}
+          </li>
           <li>
             <Link to="/cart">
               <CartInfo />

@@ -1,0 +1,39 @@
+.login {
+  background-image: url(../../src/online-shopping-store-with-mobile-shopping-cart-mail-clouds-realistic-style-vector-illustration_548887-136.jpg);
+  /* background-repeat: no-repeat; */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login .heading {
+  text-align: center;
+}
+form {
+  border-radius: 1rem;
+  background-color: white;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 0 6px var(--dark-blue);
+}
+.login__input {
+  border-radius: 1rem;
+
+  width: 100%;
+}
+input:hover {
+  border-color: var(--dark-blue);
+}
+
+.login button {
+  margin-top: 16px;
+  border-radius: 1rem;
+  width: 100%;
+}
+.login button:hover {
+  cursor: pointer;
+  border-color: var(--dark-blue);
+}

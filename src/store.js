@@ -24,6 +24,7 @@ const initalState = {
 
 // When the action happens
 function reducer(state, action) {
+  // default
   const { type, payload } = action;
   switch (type) {
     case ACTION.UPDATE_SELECTED_CATEGORY: {
@@ -52,6 +53,27 @@ function reducer(state, action) {
       }
     }
     case ACTION.REMOVE_FROM_CART: {
+      const {
+        product: { id },
+      } = payload;
+      const index = state.cart.findIndex((item) => item.product.id === id);
+
+      if (index > -1) {
+        const clonedItems = structuredClone(state.cart);
+        const reducedQuantity = clonedItems[index].quantity - 1;
+        reducedQuantity
+          ? clonedItems.splice(index, 1, {
+              ...clonedItems[index],
+              quantity: reducedQuantity,
+            })
+          : clonedItems.splice(index, 1);
+        return { ...state, cart: [...clonedItems] };
+      } else {
+        return {
+          ...state,
+          cart: [...state.cart, { ...payload, quantity: 1 }],
+        };
+      }
       return { ...state };
     }
   }

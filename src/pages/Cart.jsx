@@ -1,13 +1,34 @@
 import React from "react";
 import "./cart.css";
-import { useSelector } from "../store";
+import { ACTION, useDispatch, useSelector } from "../store";
 import { StarRating } from "../components/StarRating";
-import { getSubTotal } from "../utils";
+import { getItemCount, getSubTotal } from "../utils";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../firebase/auth";
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart);
-  // const itemCount = getItemCount(cartItems);
+  const itemCount = getItemCount(cartItems);
   const subTotal = getSubTotal(cartItems);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const proceedToCheckout = () => {
+    navigate("/checkout");
+  };
+  const handleQuantityChange = (e, { product, quantity }) => {
+    const updatedQuantity = e.target.value;
+    if (updatedQuantity < quantity) {
+      // reducing the quantity
+      dispatch({
+        type: ACTION.REMOVE_FROM_CART,
+        payload: { product },
+      });
+    } else {
+      dispatch({ type: ACTION.ADD_TO_CART, payload: { product } });
+    }
+  };
+
   return (
     <div className="cart">
       <section className="cart__items">
@@ -32,12 +53,18 @@ export default function Cart() {
                       min={0}
                       max={10}
                       value={quantity}
+                      onChange={(e) =>
+                        handleQuantityChange(e, { product, quantity })
+                      }
                     />
                   </div>
                 </section>
                 <section className="cart__items__price">
                   <small>
-                    $ <strong>{price}</strong>
+                    ${" "}
+                    <strong>
+                      {Math.round(getSubTotal([{ product, quantity }]))}
+                    </strong>
                   </small>
                 </section>
               </div>
@@ -48,10 +75,9 @@ export default function Cart() {
       </section>
 
       <section className="cart__subtotal">
-        <h2>Subtotal</h2>
-        {subTotal}
+        <h2>Subtotal</h2>$ <strong>{Math.round(subTotal)}</strong>
         <p>
-          <button>Buy Now</button>
+          <button onClick={proceedToCheckout}>Buy Now</button>
         </p>
       </section>
     </div>
