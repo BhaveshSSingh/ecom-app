@@ -5,6 +5,8 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { StateProvider } from "./store";
 import AuthProvider from "./firebase/auth";
+import { Provider } from "react-redux";
+import { store } from "./app/rtk-store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -12,7 +14,9 @@ root.render(
     <StateProvider>
       <AuthProvider>
         <BrowserRouter>
-          <App />
+          <Provider store={store}>
+            <App />
+          </Provider>
         </BrowserRouter>
       </AuthProvider>
     </StateProvider>

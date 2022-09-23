@@ -1,14 +1,18 @@
-import { ACTION, useDispatch, useSelector } from "../store";
+import { ACTION, useDispatch } from "../store";
+import { useDispatch as reduxUseDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "./Home.css";
 import { StarRating } from "../components/StarRating";
+import { addProduct, fetchAllProducts } from "../features/product-slice";
+import { addToCart } from "../features/cart-slice";
 
 function Home() {
   const [searchParams] = useSearchParams();
   const selectedCategory = searchParams.get("category");
   const searchTerm = searchParams.get("searchterm");
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products);
+  const reduxDispatch = reduxUseDispatch();
+  const { value: products, loading } = useSelector((state) => state.products);
 
   let filteredProducts = selectedCategory
     ? products.filter((prod) => prod.category === selectedCategory)
@@ -24,17 +28,19 @@ function Home() {
   );
   // console.log(filteredCategories);
 
-  async function fetchAllProducts() {
-    const result = await fetch("https://fakestoreapi.com/products");
-    dispatch({ type: ACTION.ADD_PRODUCTS, payload: await result.json() });
-    // console.log("re-render triggered", products);
-  }
+  // async function fetchAllProducts() {
+  //   const result = await fetch("https://fakestoreapi.com/products");
+  //   dispatch({ type: ACTION.ADD_PRODUCTS, payload: await result.json() });
+  //   // console.log("re-render triggered", products);
+  // }
 
   if (!products?.length) {
-    fetchAllProducts();
+    reduxDispatch(fetchAllProducts());
   }
 
-  return (
+  return loading ? (
+    <div className="spinning-loader" />
+  ) : (
     <div>
       {filteredCategories?.length
         ? filteredCategories?.map((category) => (
@@ -63,13 +69,19 @@ function Category({ title, children }) {
 function Product({ product }) {
   const { image, title, rating, price, description } = product;
   const dispatch = useDispatch();
+  const reduxDispatch = reduxUseDispatch();
   const addProductToCart = () => {
-    dispatch({ type: ACTION.ADD_TO_CART, payload: { product } });
+    dispatch({
+      type: ACTION.ADD_TO_CART,
+      payload: { product },
+    });
+    reduxDispatch(addToCart({ product, quantity: 1 }));
   };
 
   return (
     <div className="product ">
-      <img src={image} alt="" loading="lazy" />
+      <img src={image} alt={title} loading="lazy" />
+
       <div className="product__info">
         <h3 className="product__title line__clamp__title">{title}</h3>
         <h5 className="line__clamp">{description}</h5>
