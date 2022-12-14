@@ -1,6 +1,7 @@
+import { ComboBox } from "./ComboBox";
+
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ComboBox } from "./ComboBox";
 import { ACTION, useDispatch, useSelector } from "../store";
 
 function SearchBar() {
@@ -54,8 +55,8 @@ function SearchBar() {
   };
 
   return (
-    <div className="filter">
-      <section className="filter__category">
+    <div className="filter rounded-lg">
+      <section className="filter__category rounded-lg">
         <select
           name="category-filter"
           id="category-filter"

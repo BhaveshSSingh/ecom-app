@@ -1,5 +1,6 @@
-import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
+
+import { useSearchParams } from "react-router-dom";
 import {
   Combobox,
   ComboboxInput,
@@ -7,6 +8,7 @@ import {
   ComboboxList,
   ComboboxOption,
 } from "@reach/combobox";
+import { HiSearch } from "react-icons/hi";
 
 export function ComboBox({ items, onSelectionChange, onSearch }) {
   // For the drop down on Search
@@ -44,24 +46,24 @@ export function ComboBox({ items, onSelectionChange, onSearch }) {
     <>
       <Combobox aria-label="products" onSelect={handleProductSelection}>
         <ComboboxInput
-          className="city-search-input"
+          className=" "
           onChange={handleChange}
           type="search"
           value={searchTerm}
         />
-        <button onClick={handleSearch}>🔎</button>
+        <button className="bg-white" onClick={handleSearch}>
+          <HiSearch color={"#3b82f6"} size={20} />
+        </button>
         {results && (
-          <ComboboxPopover className="shadow-popup">
+          <ComboboxPopover className="shadow-popup z-10">
             {results.length > 0 ? (
-              <ComboboxList>
+              <ComboboxList className="">
                 {results.slice(0, 5).map((prod, index) => (
                   <ComboboxOption key={prod.id} value={prod.title} />
                 ))}
               </ComboboxList>
             ) : (
-              <span style={{ display: "block", margin: 8 }}>
-                No results found
-              </span>
+              <span className="block m-2 ">No results found</span>
             )}
           </ComboboxPopover>
         )}

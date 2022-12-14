@@ -5,6 +5,7 @@ import "./Home.css";
 import { StarRating } from "../../components/StarRating";
 import { addProduct, fetchAllProducts } from "../../features/product-slice";
 import { addToCart } from "../../features/cart-slice";
+import { BsCartPlus } from "react-icons/bs";
 
 function Home() {
   const [searchParams] = useSearchParams();
@@ -89,8 +90,14 @@ function Product({ product }) {
           <StarRating rating={rating} />
         </h5>
         <strong>${price}</strong>
-        <p className="product__add" onClick={addProductToCart}>
-          <button>Add to cart</button>
+        <p
+          className="product__add flex-row
+        "
+          onClick={addProductToCart}
+        >
+          <button className="bg-blue-500 rounded-lg mt-5 ">
+            <BsCartPlus color="white" />
+          </button>
         </p>
       </div>
     </div>
