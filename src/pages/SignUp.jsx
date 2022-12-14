@@ -1,7 +1,6 @@
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../firebase/auth";
-import "./login.css";
+import "./login/login.css";
 
 export default function SignUp() {
   const { signUp } = useAuth();

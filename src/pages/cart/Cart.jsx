@@ -1,10 +1,9 @@
-import React from "react";
 import "./cart.css";
-import { ACTION, useDispatch, useSelector } from "../store";
-import { StarRating } from "../components/StarRating";
-import { getItemCount, getSubTotal } from "../utils";
+import { ACTION, useDispatch, useSelector } from "../../store";
+import { StarRating } from "../../components/StarRating";
+import { getItemCount, getSubTotal } from "../../utils";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../firebase/auth";
+import { useAuth } from "../../firebase/auth";
 
 export default function Cart() {
   const cartItems = useSelector((state) => state.cart);

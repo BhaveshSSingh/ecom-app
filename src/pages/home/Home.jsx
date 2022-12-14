@@ -1,10 +1,10 @@
-import { ACTION, useDispatch } from "../store";
+import { ACTION, useDispatch } from "../../store";
 import { useDispatch as reduxUseDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import "./Home.css";
-import { StarRating } from "../components/StarRating";
-import { addProduct, fetchAllProducts } from "../features/product-slice";
-import { addToCart } from "../features/cart-slice";
+import { StarRating } from "../../components/StarRating";
+import { addProduct, fetchAllProducts } from "../../features/product-slice";
+import { addToCart } from "../../features/cart-slice";
 
 function Home() {
   const [searchParams] = useSearchParams();
