@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
 *,
 *::after,
@@ -10,13 +14,18 @@
   --dark-blue: rgb(0, 81, 255);
   --light-blue: #4ebeff;
 }
+html,
+body {
+  height: 100%;
+  position: relative;
+}
 /* Styling the scroll bar */
 body::-webkit-scrollbar {
   width: 0.6rem;
 }
 body::-webkit-scrollbar-thumb {
   /* border-radius: 1rem; */
-  background-color: var(--dark-blue);
+  background-color: var(--main-blue);
 }
 
 input,
