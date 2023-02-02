@@ -76,7 +76,12 @@ export default function Cart() {
       <section className="cart__subtotal">
         <h2>Subtotal</h2>$ <strong>{Math.round(subTotal)}</strong>
         <p>
-          <button onClick={proceedToCheckout}>Buy Now</button>
+          <button
+            className="bg-blue-600 text-white rounded-md p-2 mt-2"
+            onClick={proceedToCheckout}
+          >
+            Buy Now
+          </button>
         </p>
       </section>
     </div>

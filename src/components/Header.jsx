@@ -1,5 +1,4 @@
 import SearchBar from "./SearchBar";
-
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../firebase/auth";
 import { CartInfo } from "./CartInfo";
@@ -28,7 +27,7 @@ export function Header() {
       </section>
       <section className="header__navigation">
         <ul className="header__navigation__links">
-          <li>
+          <li className="pr-3">
             {user ? `Hello ${user?.displayName ?? user.email}` : "Sign In"}
           </li>
           <li>
